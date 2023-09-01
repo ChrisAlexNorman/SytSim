@@ -1,0 +1,10 @@
+EditorConfig==0.12.3
+ipykernel==6.24.0
+jsbeautifier==1.14.9
+nbformat==5.9.1
+numexpr==2.8.4
+numpy==1.25.1
+pandas==2.0.3
+plotly==5.15.0
+scipy==1.11.1
+six==1.16.0

@@ -1,0 +1,39 @@
+{
+  "name": "synaptotagmin_1",
+  "rate_matrix": [
+    [0, "2*kon*ca", 0, 0],
+    ["koff", 0, "kon*ca", 0],
+    [0, "2*koff", 0, "kin"],
+    [0, 0, "kout", 0]
+  ],
+  "parameters": {
+    "kon": {
+      "value": 1,
+      "units": "1/uMms"
+    },
+    "koff": {
+      "value": 150,
+      "units": "1/ms"
+    },
+    "kin": {
+      "value": 100,
+      "units": "1/ms"
+    },
+    "kout": {
+      "value": 0.667,
+      "units": "1/ms"
+    }
+  },
+  "initial_condition": [1, 0, 0, 0],
+  "stim_template": {
+    "ca": {
+      "timestamp": [],
+      "value": [],
+      "time_units": "ms",
+      "stim_units": "uM"
+    }
+  },
+  "state_names": ["S0", "S1", "S2", "I"],
+  "reference": "Norman,C., Krishnakumar,S., Timofeeva,Y. and Volynski,K. The release of inhibition model reproduces kinetics and plasticity of neurotransmitter release in central synapses. Under Review (2023)",
+  "doi": "https://doi.org/10.21203/rs.3.rs-2700789/v1"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "allosteric_release",
+  "rate_matrix": [
+    [0, "5*kon*ca", 0, 0, 0, 0, "i_plus*f**0"],
+    ["1*koff*b**0", 0, "4*kon*ca", 0, 0, 0, "i_plus*f**1"],
+    [0, "2*koff*b**1", 0, "3*kon*ca", 0, 0, "i_plus*f**2"],
+    [0, 0, "3*koff*b**2", 0, "2*kon*ca", 0, "i_plus*f**3"],
+    [0, 0, 0, "4*koff*b**3", 0, "1*kon*ca", "i_plus*f**4"],
+    [0, 0, 0, 0, "5*koff*b**4", 0, "i_plus*f**5"],
+    ["krep", 0, 0, 0, 0, 0, 0]
+  ],
+  "parameters": {
+    "kon": {
+      "value": 0.1,
+      "units": "1/uMms"
+    },
+    "koff": {
+      "value": 4,
+      "units": "1/ms"
+    },
+    "b": {
+      "value": 0.5,
+      "units": ""
+    },
+    "f": {
+      "value": 31.3,
+      "units": ""
+    },
+    "i_plus": {
+      "value": 2e-07,
+      "units": "1/ms"
+    },
+    "krep": {
+      "value": 0,
+      "units": "1/ms"
+    }
+  },
+  "initial_condition": [1, 0, 0, 0, 0, 0, 0],
+  "stim_template": {
+    "ca": {
+      "timestamp": [],
+      "value": [],
+      "time_units": "ms",
+      "stim_units": "uM"
+    }
+  },
+  "state_names": ["S0", "S1", "S2", "S3", "S4", "S5", "Fused"],
+  "reference": "Lou,X., Scheuss,V., & Schneggenburger,R. Allosteric modulation of the presynaptic Ca2+ sensor for vesicle fusion. Nature. 435, 497-501 (2005)",
+  "doi": "https://doi.org/10.1038/nature03568"
+}
