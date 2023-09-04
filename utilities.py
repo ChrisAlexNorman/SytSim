@@ -1,3 +1,5 @@
+import copy
+
 def name_active_states(state_values, state_names):
     named_states = []
     for index, value in enumerate(state_values):
@@ -21,6 +23,7 @@ def sparsify_rate_matrix(rate_matrix, state_names, transitions={}):
     return transitions
 
 def eval_params_in_array(array, params):
+    array = copy.deepcopy(array)
     for i, row in enumerate(array):
         for j, elem in enumerate(row):
             if isinstance(elem, str):
