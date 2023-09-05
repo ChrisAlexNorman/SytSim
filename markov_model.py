@@ -9,8 +9,8 @@ from scipy.integrate import odeint, cumtrapz
 from scipy.optimize import root_scalar
 import multiprocessing as mp 
 import time
-from clamping import apply_transition, get_feasible_transitions
-from utilities import name_active_states, sparsify_rate_matrix, eval_params_in_array
+from .clamping import apply_transition, get_feasible_transitions
+from .utilities import name_active_states, sparsify_rate_matrix, eval_params_in_array
 
 ### MARKOV MODEL CLASS ###
 
