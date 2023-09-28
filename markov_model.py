@@ -359,7 +359,7 @@ def stochastically_simulate(simulation):
 
 def event_requirements_met(simulation):
     for key, n_required in simulation["n_events_required"].items():
-        if len(simulation["event_times"][key]) <= n_required:
+        if len(simulation["event_times"][key]) < n_required:
             return False
     return True
 
