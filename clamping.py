@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.integrate import cumtrapz
-from .utilities import sparsify_rate_matrix, eval_params_in_array
+from utilities import sparsify_rate_matrix, eval_params_in_array
 
 ### CLAMP MODEL BUILDER ###
 

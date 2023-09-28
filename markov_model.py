@@ -9,8 +9,8 @@ from scipy.integrate import odeint, cumtrapz
 from scipy.optimize import root_scalar
 import multiprocessing as mp 
 import time
-from .clamping import apply_transition, get_feasible_transitions
-from .utilities import name_active_states, sparsify_rate_matrix, eval_params_in_array
+from clamping import apply_transition, get_feasible_transitions
+from utilities import name_active_states, sparsify_rate_matrix, eval_params_in_array
 
 ### MARKOV MODEL CLASS ###
 
@@ -214,7 +214,7 @@ def run_stochastic_simulations(simulation):
 
     with mp.Pool(simulation["n_processes"]) as pool:
         # Batch simulations until required number of events achieved
-        while not event_requirements_met(simulation):
+        while True:
             simulation["n_simulations"] += simulation["batch_size"]
             async_results = []
             for _ in range(simulation["batch_size"]):
@@ -242,6 +242,9 @@ def run_stochastic_simulations(simulation):
                     # Calculate free clamps at instance of fusion
                     free_clamps_fused["timestamp"].extend(event_times["Fused"])
                     free_clamps_fused["n_free_clamps"].extend(np.interp(event_times["Fused"], timestamp, n_free_clamps))
+            
+            if event_requirements_met(simulation):
+                break
         
     if simulation["track_clamps"]:
         # Calculate free clamps on unfused SVs
