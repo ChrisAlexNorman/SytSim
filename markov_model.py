@@ -103,6 +103,7 @@ class MarkovModel:
         sim_spec.setdefault("track_clamps", False)
         sim_spec.setdefault("runtime", time.time())
         sim_spec.setdefault("n_processes", 1)
+        sim_spec.setdefault("save_paths", False)
 
         # Set number of simulations or required number of events
         if "n_simulations" in sim_spec:
@@ -208,11 +209,13 @@ def run_stochastic_simulations(simulation):
 
     # Initialise results container
     simulation["event_times"] = {key: np.array([]) for key in simulation["record"]}
+    simulation["sample_paths"] = []
     if simulation["track_clamps"]:
         simulation["free_clamps"] = np.zeros(len(simulation["timestamp"]))
         free_clamps_fused = {"timestamp": [], "n_free_clamps": []}
 
     with mp.Pool(simulation["n_processes"]) as pool:
+
         # Batch simulations until required number of events achieved
         while True:
             simulation["n_simulations"] += simulation["batch_size"]
@@ -224,13 +227,20 @@ def run_stochastic_simulations(simulation):
                         args=(simulation,)
                     )
                 )
-            # Collect event times
+            
+            # Collect outputs
             for output in async_results:
-                event_times = output.get()
+                event_times, sample_path = output.get()
+
+                # Append event times
                 for key, values in event_times.items():
                     simulation["event_times"][key] = np.append(
                         simulation["event_times"][key], (values)
                     )
+                
+                # Append sample paths
+                simulation["sample_paths"].append(sample_path)
+                
                 # Convert clamping events into timeseries (clamp models only)
                 if simulation["track_clamps"]:
                     timestamp, n_free_clamps = calc_free_clamp_timeseries(event_times)
@@ -310,8 +320,9 @@ def stochastically_simulate(simulation):
     state_update_rule = simulation["state_update_rule"]
     rate_update_rule = simulation["rate_update_rule"]
 
-    # Initialise results container
+    # Initialise results containers
     event_times = {key: [] for key in record}
+    sample_path = []
 
     # Initialise system
     current_time = 0
@@ -325,6 +336,9 @@ def stochastically_simulate(simulation):
         for state in changed_state:
             if state in record:
                 event_times[state].append(current_time)
+        
+        if simulation['save_paths']:
+            sample_path.append((current_time, copy.deepcopy(current_state)))
 
         # Find time waited in current state
         if len(current_transitions) == 0: break
@@ -355,7 +369,7 @@ def stochastically_simulate(simulation):
         # Update current transitions
         current_transitions = rate_update_rule(current_state, simulation, chosen_transition)
         
-    return event_times
+    return event_times, sample_path
 
 def event_requirements_met(simulation):
     for key, n_required in simulation["n_events_required"].items():
