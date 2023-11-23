@@ -6,7 +6,9 @@ def name_active_states(state_values, state_names):
         if value: named_states.append(state_names[index])
     return named_states
 
-def sparsify_rate_matrix(rate_matrix, state_names, transitions={}):
+def sparsify_rate_matrix(rate_matrix, state_names, transitions=None):
+    if transitions is None:
+        transitions = {}
     for source_idx, source_exit_rates in enumerate(rate_matrix):
         source_name = state_names[source_idx]
         for dest_idx, rate in enumerate(source_exit_rates):
